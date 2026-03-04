@@ -17,23 +17,11 @@ const app = express()
 
 dbURI = process.env.DATABASE_URL
 
+const cors = require('cors');
+
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      "https://purr-money.vercel.app",
-      "http://purr-money.vercel.app",
-      "http://localhost:5173"
-    ];
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
+  origin: true,       // allow all origins
+  credentials: true   // allow cookies
 }));
 
 app.use(express.json())
