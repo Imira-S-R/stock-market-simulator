@@ -48,7 +48,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.get('/api', (req, res) => res.send('hello'))
-app.get('/check_user', (req, res,) => {
+app.get('/api/check_user', (req, res,) => {
   if (req.isAuthenticated()) {
     res.status(201).send('goood')
   } else {

@@ -5,24 +5,24 @@ require('dotenv').config()
 
 const router = Router()
 
-router.post('/signup', authController.signup_post)
+router.post('/api/signup', authController.signup_post)
 
-router.get('/google', passport.authenticate('google', { scope: ['profile'] }))
+router.get('/api/google', passport.authenticate('google', { scope: ['profile'] }))
 
-router.get('/google/callback', passport.authenticate('google', {
+router.get('/api/google/callback', passport.authenticate('google', {
     failureRedirect: '/',
 }), (req, res) => {
     res.redirect(`${process.env.FRONTEND_URL}`)
 })
 
-router.get('/logout', (req, res, next) => {
+router.get('/api/logout', (req, res, next) => {
     req.logout(function (err) {
         if (err) { return next(err) }
         res.status(200).json({ success: true })
     })
 })
 
-router.get('/profile', (req, res) => {
+router.get('/api/profile', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ error: 'Not logged in' })
     }
