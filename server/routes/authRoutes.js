@@ -22,7 +22,7 @@ router.get('/api/google', passport.authenticate('google', { scope: ['profile'] }
 //     })(req, res, next);
 // });
 
-router.get('/api/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => { res.redirect(`${process.env.FRONTEND_URL}`) })
+router.get(`${process.env.WEBSITE_URL}/api/google/callback`, passport.authenticate('google', { failureRedirect: '/' }), (req, res) => { res.redirect(`${process.env.FRONTEND_URL}`) })
 
 router.get('/api/logout', (req, res, next) => {
     req.logout(function (err) {
