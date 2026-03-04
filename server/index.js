@@ -22,8 +22,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
 
     const allowedOrigins = [
-      "https://stock-market-simulator-backend.vercel.app",
-      "https://stock-market-simulator-beryl.vercel.app",
+      "https://purr-money.vercel.app",
       "http://localhost:5173"
     ];
 
@@ -48,7 +47,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-app.get('/', (req, res) => res.send('hello'))
+app.get('/api', (req, res) => res.send('hello'))
 app.get('/check_user', (req, res,) => {
   if (req.isAuthenticated()) {
     res.status(201).send('goood')

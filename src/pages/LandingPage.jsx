@@ -5,7 +5,7 @@ export default function LandingPage() {
     const navigate = useNavigate()
 
     const handleGoogleLogin = () => {
-        window.location.href = `http://localhost:3000/google`
+        window.location.href = `${import.meta.env.VITE_API_URL}/google`
     }
 
     // const handleGoogleLogout = () => {
