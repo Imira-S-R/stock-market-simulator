@@ -7,7 +7,7 @@ module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
-        callbackURL: `${process.env.WEBSITE_URL}/api/google/callback`
+        callbackURL: `/api/google/callback`
     },
         async (accessToken, refreshToken, profile, done) => {
             const newUser = {
