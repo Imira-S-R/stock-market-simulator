@@ -1,0 +1,35 @@
+const { Router } = require('express')
+const authController = require('../controllers/authController')
+const passport = require('passport')
+require('dotenv').config()
+
+const router = Router()
+
+router.post('/signup', authController.signup_post)
+
+router.get('/google', passport.authenticate('google', { scope: ['profile'] }))
+
+router.get('/google/callback', passport.authenticate('google', {
+    failureRedirect: '/',
+}), (req, res) => {
+    res.redirect(`http://localhost:5173/dashboard`)
+})
+
+router.get('/logout', (req, res, next) => {
+    req.logout(function (err) {
+        if (err) { return next(err) }
+        res.status(200).json({ success: true })
+    })
+})
+
+router.get('/profile', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: 'Not logged in' })
+    }
+
+    // req.user contains the authenticated user object
+    console.log('Authenticated user ID:', req.user.id)
+    res.json({ id: req.user.id, email: req.user.email })
+})
+
+module.exports = router

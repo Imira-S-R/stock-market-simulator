@@ -1,0 +1,76 @@
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors')
+const authRoutes = require('../backend/routes/authRoutes')
+const stockRoutes = require('../backend/routes/stockRoutes')
+const snapshotRoutes = require('../backend/routes/snapshotRoutes')
+const passport = require('passport')
+const session = require('express-session')
+const MongoStore = require('connect-mongo').default
+require('dotenv').config()
+// const { ensureAuth } = require('./middleware/auth')
+
+
+require('./config/passport')(passport)
+
+const app = express()
+
+dbURI = process.env.DATABASE_URL
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      "https://stock-market-simulator-backend.vercel.app",
+      "https://stock-market-simulator-beryl.vercel.app",
+      "http://localhost:5173"
+    ];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+app.use(express.json())
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { httpOnly: true },
+  store: MongoStore.create({
+    mongoUrl: process.env.DATABASE_URL
+  }),
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.get('/', (req, res) => res.send('hello'))
+app.get('/check_user', (req, res,) => {
+  if (req.isAuthenticated()) {
+    res.status(201).send('goood')
+  } else {
+    res.status(500).send('nope')
+  }
+})
+app.use(authRoutes)
+app.use(stockRoutes)
+app.use(snapshotRoutes)
+
+if (process.env.NODE_ENV !== 'production') {
+
+  // Serve static files from the dist directory
+  app.use(express.static("dist"));
+  // Serve index.html for all other requests
+  app.get("/{*splat}", (req, res) => {
+    res.sendFile(__dirname + "/dist/index.html");
+  });
+  // Start the server
+  const port = process.env.PORT || 4444;
+  mongoose.connect(dbURI).then((result) => app.listen(3000)).catch((err) => { console.log(err) })
+}
+
+module.exports = app
