@@ -21,13 +21,13 @@ app.use(cors({
   origin: true,       // allow all origins
   credentials: true   // allow cookies
 }));
-
+app.set('trust proxy', 1);
 app.use(express.json())
 app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true, secure: true },
+  cookie: { httpOnly: true, secure: true, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 },
   store: MongoStore.create({
     mongoUrl: process.env.DATABASE_URL
   }),
