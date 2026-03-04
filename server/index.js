@@ -17,8 +17,6 @@ const app = express()
 
 dbURI = process.env.DATABASE_URL
 
-const cors = require('cors');
-
 app.use(cors({
   origin: true,       // allow all origins
   credentials: true   // allow cookies
