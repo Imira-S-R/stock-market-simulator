@@ -46,6 +46,8 @@ app.use(authRoutes)
 app.use(stockRoutes)
 app.use(snapshotRoutes)
 
+mongoose.connect(dbURI).catch((err) => console.log(err));
+
 if (process.env.NODE_ENV !== 'production') {
 
   // Serve static files from the dist directory
