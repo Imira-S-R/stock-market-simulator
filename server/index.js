@@ -23,6 +23,7 @@ app.use(cors({
 
     const allowedOrigins = [
       "https://purr-money.vercel.app",
+      "http://purr-money.vercel.app",
       "http://localhost:5173"
     ];
 
@@ -40,7 +41,7 @@ app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true },
+  cookie: { httpOnly: true, secure: true },
   store: MongoStore.create({
     mongoUrl: process.env.DATABASE_URL
   }),
