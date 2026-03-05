@@ -36,13 +36,7 @@ export default function UserHoldings() {
                         </tr>
                     </thead>
 
-                    {/* <tbody>
-                        <tr>
-                            <td colSpan="4" className="py-16 text-center text-gray-500">
-                                No stocks owned yet
-                            </td>
-                        </tr>
-                    </tbody> */}
+
                     <tbody>
                         {userHoldings?.length > 0 ? (
                             userHoldings.map((holding, index) => (

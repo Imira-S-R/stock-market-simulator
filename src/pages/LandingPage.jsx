@@ -8,20 +8,11 @@ export default function LandingPage() {
         window.location.href = `${import.meta.env.VITE_API_URL}/google`
     }
 
-    // const handleGoogleLogout = () => {
-    //     const logout = async () => {
-    //         const res = await fetch(`${import.meta.env.VITE_API_URL}/logout`, { credentials: 'include' })
-    //         const data = await res.json()
-    //         console.log(data)
-    //     }
-    //     logout()
-    // }
-
     useEffect(() => {
         const checkAuth = async () => {
             try {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/check_user`, {
-                    method: "GET", // or POST depending on your backend
+                    method: "GET", 
                     credentials: "include"
                 })
 

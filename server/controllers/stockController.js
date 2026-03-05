@@ -165,7 +165,7 @@ module.exports.get_user_holdings = async (req, res) => {
         const user = await User.findById(userId)
 
         for (const stock of user.portfolio) {
-            if (stock.shares === 0) continue; // skip stocks with 0 shares
+            if (stock.shares === 0) continue;
 
             const response = await fetch(
                 `https://www.cse.lk/api/companyInfoSummery?symbol=${stock.symbol}`,
@@ -213,12 +213,7 @@ module.exports.search_for_company = async (req, res) => {
 
             return bStarts - aStarts;
         });
-    // all_company_data.map((company) => {
-    //     if ((company.name.toLowerCase()[0]) === (searchTerm.toLowerCase()) || (company.symbol.toLowerCase()[0]) === (searchTerm.toLowerCase())) {
-    //         similarNames.push(company)
-    //     }
-    // })
-
+    
     res.json(similarNames)
 
 }
@@ -261,69 +256,6 @@ module.exports.get_info_company = async (req, res) => {
         const data = await response.json();
 
         res.json(data)
-        // res.json({
-        //     "reqSymbolBetaInfo": {
-        //         "securityId": 1075,
-        //         "triASIBetaValue": 0.5367965,
-        //         "betaValueSPSL": 0.27868852,
-        //         "triASIBetaPeriod": "2025",
-        //         "quarter": 1
-        //     },
-        //     "reqTagsLogo": null,
-        //     "reqLogo": {
-        //         "id": 849,
-        //         "path": "upload_logo/1075_1388056466.jpeg",
-        //         "secId": 1075
-        //     },
-        //     "reqSymbolInfo": {
-        //         "id": 1849,
-        //         "symbol": "SHL.N0000",
-        //         "name": "SOFTLOGIC HOLDINGS PLC",
-        //         "issueDate": "12/JUL/2011",
-        //         "quantityIssued": 1395257979,
-        //         "parValue": 1,
-        //         "issuedPrice": null,
-        //         "lastTradedPrice": 8.8,
-        //         "wtdHiPrice": 7.9,
-        //         "mtdHiPrice": 8.6,
-        //         "ytdHiPrice": 8.8,
-        //         "p12HiPrice": 8.8,
-        //         "allHiPrice": 90,
-        //         "allLowPrice": 5.4,
-        //         "wtdLowPrice": 7,
-        //         "mtdLowPrice": 6.5,
-        //         "ytdLowPrice": 5.4,
-        //         "p12LowPrice": 5.4,
-        //         "tdyShareVolume": 14718019,
-        //         "wdyShareVolume": 4454562,
-        //         "mtdShareVolume": 25955565,
-        //         "ytdShareVolume": 54648579,
-        //         "p12ShareVolume": 94572016,
-        //         "tdyTradeVolume": 1608,
-        //         "wtdTradeVolume": null,
-        //         "mtdTradeVolume": null,
-        //         "ytdTradeVolume": null,
-        //         "p12TradeVolume": null,
-        //         "tdyTurnover": 129532072,
-        //         "wtdTurnover": 32565170,
-        //         "mtdTurnover": 191512624,
-        //         "ytdTurnover": 397787232,
-        //         "p12Turnover": null,
-        //         "previousClose": 7.4,
-        //         "foreignHoldings": null,
-        //         "foreignPercentage": null,
-        //         "instrumentsDate": null,
-        //         "hiTrade": 9.2,
-        //         "lowTrade": 7.7,
-        //         "closingPrice": 8.8,
-        //         "marketCap": 12278270215.2,
-        //         "marketCapPercentage": 0.14619528,
-        //         "change": 1.4,
-        //         "changePercentage": 18.91891891891892,
-        //         "symbolIndexShareVolume": 1395257979,
-        //         "isin": "LK0386N00009"
-        //     }
-        // });
 
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch company data" });

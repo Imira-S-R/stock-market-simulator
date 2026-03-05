@@ -13,7 +13,6 @@ import { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { ClipLoader } from 'react-spinners'
 
-// Register Chart.js components
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -83,7 +82,6 @@ export default function PortfolioSummary() {
     return (
         userData ? <div className="grid lg:grid-cols-3 gap-6">
 
-            {/* Left Stat Cards */}
             <div className="space-y-6">
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-xl">
                     <p className="text-gray-400 text-sm">Portfolio Value</p>
@@ -100,7 +98,6 @@ export default function PortfolioSummary() {
                 </div>
             </div>
 
-            {/* Chart Card */}
             <div className="lg:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col">
                 <h2 className="text-gray-400 text-sm mb-4">
                     Portfolio Performance

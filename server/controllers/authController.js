@@ -10,5 +10,3 @@ module.exports.signup_post = async (req, res) => {
         console.log(err)
     }
 }
-
-//69a425c7d53bcf95162e7be7

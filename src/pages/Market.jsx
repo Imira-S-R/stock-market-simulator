@@ -52,7 +52,6 @@ export default function Market() {
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white pt-[100px] px-4 pb-6">
             <div className="max-w-[1100px] mx-auto">
 
-                {/* Title */}
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold tracking-wide">
                         Search Companies & Markets
@@ -62,7 +61,6 @@ export default function Market() {
                     </p>
                 </div>
 
-                {/* Search Input */}
                 <div className="flex justify-center">
                     <div className="relative w-full max-w-[500px]">
                         <input
@@ -80,7 +78,6 @@ export default function Market() {
                     </div>
                 </div>
 
-                {/* Search Results */}
                 {searchTerm && (
                     <div className="mt-10 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-xl">
                         <h2 className="text-gray-400 text-lg mb-6">
@@ -125,7 +122,6 @@ export default function Market() {
                     </div>
                 )}
 
-                {/* Top Gainers Section */}
                 <div className="mt-16">
                     <TopGainers />
                 </div>

@@ -47,14 +47,7 @@ module.exports.get_portfolio_chart_values = async (req, res) => {
 }
 
 module.exports.add_portfolio_chart_values = async (req, res) => {
-    // const chart_value = await Snapshot.create(
-    //     {
-    //         userId: '69a425c7d53bcf95162e7be7',
-    //         portfolioValue: 1000
-    //     }
-    // )
-    // res.send('done')
-
+    
     const users = await User.find({})
     for (const user of users) {
         let portfolio_value = 0;

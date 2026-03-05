@@ -59,8 +59,8 @@ export default function StockPage() {
         plugins: {
             legend: { display: false },
             tooltip: {
-                enabled: true,                // make sure tooltips are on
-                backgroundColor: "rgba(255,255,255,0.1)", // translucent glass
+                enabled: true,                
+                backgroundColor: "rgba(255,255,255,0.1)",
                 titleColor: "#fff",
                 bodyColor: "#fff",
                 borderColor: "rgba(255,255,255,0.2)",
@@ -69,15 +69,14 @@ export default function StockPage() {
                 padding: 8,
                 cornerRadius: 6,
                 callbacks: {
-                    // show only value
                     title: () => "",
                     label: (context) => context.formattedValue,
                 },
             },
         },
         interaction: {
-            mode: "nearest",   // show tooltip for nearest point
-            intersect: true,   // only when cursor is on point
+            mode: "nearest",   
+            intersect: true,   
         },
         scales: {
             x: {
@@ -103,13 +102,13 @@ export default function StockPage() {
                     },
 
                     body: JSON.stringify({
-                        symbol: symbol,       // just pass variable directly
-                        price_bought: stockPrice,     // replace with dynamic price if needed
-                        shares: qty           // just pass variable
+                        symbol: symbol,       
+                        price_bought: stockPrice,     
+                        shares: qty           
                     },)
                 });
 
-                const data = await res.json(); // parse JSON response
+                const data = await res.json(); 
                 console.log("Server response:", data);
 
                 if (res.ok) {
@@ -133,13 +132,13 @@ export default function StockPage() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        symbol: symbol,       // just pass variable directly
-                        price_sold: stockPrice,     // replace with dynamic price if needed
-                        shares: qty           // just pass variable
+                        symbol: symbol,       
+                        price_sold: stockPrice,     
+                        shares: qty          
                     })
                 });
 
-                const data = await res.json(); // parse JSON response
+                const data = await res.json();
                 console.log("Server response:", data);
 
                 if (res.ok) {
@@ -200,11 +199,9 @@ export default function StockPage() {
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white pt-[90px] px-4 pb-7">
             <div className="max-w-[1100px] mx-auto">
 
-                {/* Header Section */}
                 <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-2xl border border-white/10">
                     <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
 
-                        {/* Company Info */}
                         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
                             <div className="w-[220px] h-[150px] bg-white rounded-xl flex justify-center items-center shadow-lg">
                                 {data.reqLogo && (
@@ -237,7 +234,6 @@ export default function StockPage() {
                             </div>
                         </div>
 
-                        {/* Buy / Sell */}
                         <div className="flex flex-col gap-4">
                             <button onClick={() => { setBuyOpen(true) }} className="px-8 py-3 rounded-xl bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:scale-105 font-semibold">
                                 BUY
@@ -250,7 +246,6 @@ export default function StockPage() {
                     </div>
                 </div>
 
-                {/* Stats Section */}
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
                     <StatCard
@@ -273,12 +268,10 @@ export default function StockPage() {
                 </div>
 
                 <div className="mt-10 p-6 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl">
-                    {/* Heading */}
                     <h2 className="text-white/90 font-semibold text-lg mb-4 text-center">
                         Last Month Prices
                     </h2>
 
-                    {/* Line Chart */}
                     <div className="h-[300px]"><Line data={_data} options={options} /></div>
                 </div>
             </div>
@@ -290,14 +283,12 @@ export default function StockPage() {
                     role="dialog"
                     tabIndex={-1}
                 >
-                    {/* Glass overlay */}
                     <div
                         className="absolute inset-0 bg-black/40 backdrop-blur-md"
                         onClick={() => setBuyOpen(false)}
                         aria-hidden="true"
                     />
 
-                    {/* Modal */}
                     <div className="relative w-[90%] max-w-[400px] p-7 rounded-2xl 
             bg-white/20 backdrop-blur-xl 
             border border-white/30 
@@ -385,14 +376,12 @@ export default function StockPage() {
                     role="dialog"
                     tabIndex={-1}
                 >
-                    {/* Glass overlay */}
                     <div
                         className="absolute inset-0 bg-black/40 backdrop-blur-md"
                         onClick={() => setSellOpen(false)}
                         aria-hidden="true"
                     />
 
-                    {/* Modal */}
                     <div className="relative w-[90%] max-w-[400px] p-7 rounded-2xl 
             bg-white/20 backdrop-blur-xl 
             border border-white/30 
