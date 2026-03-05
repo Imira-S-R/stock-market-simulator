@@ -22,7 +22,7 @@ app.use(cors({
   credentials: true   // allow cookies
 }));
 app.set('trust proxy', 1);
-// secure: false, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 ADD THIS WHEN DEPLOYING
+// secure: true, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 ADD THIS WHEN DEPLOYING
 app.use(express.json())
 app.use(session({
   secret: process.env.SECRET_KEY,
