@@ -73,7 +73,7 @@ module.exports.add_portfolio_chart_values = async (req, res) => {
         console.log(user._id, portfolio_value);
         const chart_value = await Snapshot.create({
             userId: user._id,
-            portfolioValue: portfolio_value
+            portfolioValue: portfolio_value + user.cashBalance
         })
     }
     res.send('done')
