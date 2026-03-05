@@ -34,7 +34,7 @@ export default function StockPage() {
     const [stockSymbol, setStockSymbol] = useState("");
     const [userHoldings, setUserHoldings] = useState()
     const [user, setUser] = useState()
-    const [cashUnavailable, setCashUnavailable] = useState(false)
+    const [maxStocks, setMaxStocks] = useState(0)
     const [chartLabel, setChartLabel] = useState([])
     const [chartData, setChartData] = useState([])
 
@@ -121,6 +121,10 @@ export default function StockPage() {
             }
             console.log(`Buying ${qty} shares of ${symbol}`);
         } else {
+            if (quantity > maxStocks) {
+                console.log('You aint got enough stocks gng')
+                return
+            }
             try {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/sell_stock`, {
                     credentials: 'include',
@@ -167,12 +171,15 @@ export default function StockPage() {
             const data = await res.json()
 
             setUser(data)
-
-            console.log(data.cashBalance)
+            console.log(data)
 
             for (const stock of data.portfolio) {
                 if (stock.shares !== 0) {
                     user_holdings.push(stock.symbol)
+                    if (stock.symbol === state) {
+                        setMaxStocks(stock.shares)
+                        console.log(stock.shares)
+                    }
                 }
             }
 
@@ -283,60 +290,85 @@ export default function StockPage() {
                     role="dialog"
                     tabIndex={-1}
                 >
-                    {/* Blurred background overlay */}
+                    {/* Glass overlay */}
                     <div
-                        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/40 backdrop-blur-md"
                         onClick={() => setBuyOpen(false)}
                         aria-hidden="true"
-                    ></div>
+                    />
 
-                    {/* Modal content */}
-                    <div className="relative bg-white p-6 rounded-xl shadow-lg max-w-[320px] sm:max-w-[400px] text-black z-10">
-                        <h2 className="text-xl font-semibold mb-4">Buy Stock</h2>
+                    {/* Modal */}
+                    <div className="relative w-[90%] max-w-[400px] p-7 rounded-2xl 
+            bg-white/20 backdrop-blur-xl 
+            border border-white/30 
+            shadow-[0_8px_40px_rgba(0,0,0,0.3)] 
+            text-white z-10">
 
-                        <label htmlFor="stock-symbol" className="block mb-2 font-medium">
+                        <h2 className="text-2xl font-semibold mb-5 tracking-wide">
+                            Buy Stock
+                        </h2>
+
+                        <label htmlFor="stock-symbol" className="block mb-2 text-sm font-medium text-white/80">
                             Stock Symbol
                         </label>
+
                         <input
                             id="stock-symbol"
                             type="text"
                             value={stockSymbol}
                             readOnly
-                            className="w-full mb-4 p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed"
+                            className="w-full mb-4 px-3 py-2 rounded-lg
+                bg-white/10 border border-white/20
+                text-white placeholder-white/60
+                backdrop-blur-sm cursor-not-allowed"
                         />
 
-                        <label htmlFor="quantity" className="block mb-2 font-medium">
+                        <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-white/80">
                             Quantity
                         </label>
+
                         <input
                             id="quantity"
                             type="number"
                             min={1}
                             value={quantity}
                             onChange={(e) => setQuantity(Number(e.target.value))}
-                            className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            className="w-full mb-4 px-3 py-2 rounded-lg
+                bg-white/10 border border-white/20
+                text-white placeholder-white/60
+                focus:outline-none focus:ring-2 focus:ring-green-400"
                         />
 
-                        <h1 className="mb-3 text-red-500">Price: -{quantity * stockPrice} LKR</h1>
+                        <p className="mb-3 text-red-300 font-medium">
+                            Price: -{quantity * stockPrice} LKR
+                        </p>
 
-                        {((quantity * stockPrice) > user.cashBalance) && <h1 className="mb-4 text-red-500">You do not have enough cash</h1>}
+                        {(quantity * stockPrice > user.cashBalance) && (
+                            <p className="mb-4 text-red-300 font-medium">
+                                You do not have enough cash
+                            </p>
+                        )}
 
-                        <div className="flex justify-end gap-3">
+                        <div className="flex justify-end gap-3 mt-4">
                             <button
                                 onClick={() => setBuyOpen(false)}
-                                className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 transition"
+                                className="px-4 py-2 rounded-lg 
+                    bg-white/10 border border-white/20 
+                    hover:bg-white/20 transition"
                             >
                                 Cancel
                             </button>
 
                             <button
                                 onClick={() => {
-                                    if (!((quantity * stockPrice) > user.cashBalance)) {
+                                    if (!(quantity * stockPrice > user.cashBalance)) {
                                         handleBuySell(stockSymbol, quantity, 'buy');
                                         setBuyOpen(false);
                                     }
                                 }}
-                                className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+                                className="px-4 py-2 rounded-lg 
+                    bg-green-500/80 hover:bg-green-500 
+                    shadow-lg transition"
                                 disabled={quantity < 1}
                             >
                                 Buy
@@ -353,60 +385,99 @@ export default function StockPage() {
                     role="dialog"
                     tabIndex={-1}
                 >
-                    {/* Blurred background overlay */}
+                    {/* Glass overlay */}
                     <div
-                        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/40 backdrop-blur-md"
                         onClick={() => setSellOpen(false)}
                         aria-hidden="true"
-                    ></div>
+                    />
 
-                    {/* Modal content */}
-                    <div className="relative bg-white p-6 rounded-xl shadow-lg max-w-[320px] sm:max-w-[400px] text-black z-10">
-                        <h2 className="text-xl font-semibold mb-4">Sell Stock</h2>
+                    {/* Modal */}
+                    <div className="relative w-[90%] max-w-[400px] p-7 rounded-2xl 
+            bg-white/20 backdrop-blur-xl 
+            border border-white/30 
+            shadow-[0_8px_40px_rgba(0,0,0,0.3)] 
+            text-white z-10">
 
-                        <label htmlFor="stock-symbol" className="block mb-2 font-medium">
+                        <h2 className="text-2xl font-semibold mb-5 tracking-wide">
+                            Sell Stock
+                        </h2>
+
+                        <label htmlFor="stock-symbol" className="block mb-2 text-sm font-medium text-white/80">
                             Stock Symbol
                         </label>
+
                         <input
                             id="stock-symbol"
                             type="text"
                             value={stockSymbol}
                             readOnly
-                            className="w-full mb-4 p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed"
+                            className="w-full mb-4 px-3 py-2 rounded-lg
+                bg-white/10 border border-white/20
+                text-white placeholder-white/60
+                backdrop-blur-sm cursor-not-allowed"
                         />
 
-                        <label htmlFor="quantity" className="block mb-2 font-medium">
+                        <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-white/80">
                             Quantity
                         </label>
+
                         <input
                             id="quantity"
                             type="number"
                             min={1}
                             value={quantity}
                             onChange={(e) => setQuantity(Number(e.target.value))}
-                            className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                            className="w-full mb-4 px-3 py-2 rounded-lg
+                bg-white/10 border border-white/20
+                text-white placeholder-white/60
+                focus:outline-none focus:ring-2 focus:ring-red-400"
                         />
 
-                        {userHoldings.includes(stockSymbol) ? <h1 className="mb-4 text-green-500">Price: +{quantity * stockPrice} LKR</h1> : <h1 className="mb-4 text-red-500">You don't own this stock</h1>}
+                        {userHoldings.includes(stockSymbol) ? (
+                            <p className="mb-3 text-green-300 font-medium">
+                                Price: +{quantity * stockPrice} LKR
+                            </p>
+                        ) : (
+                            <p className="mb-3 text-red-300 font-medium">
+                                You don't own this stock
+                            </p>
+                        )}
 
-                        <div className="flex justify-end gap-3">
+                        {(quantity > maxStocks) && (
+                            <p className="mb-3 text-red-300 font-medium">
+                                Not enough stocks
+                            </p>
+                        )}
+
+
+
+                        <div className="flex justify-end gap-3 mt-4">
                             <button
                                 onClick={() => setSellOpen(false)}
-                                className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 transition"
+                                className="px-4 py-2 rounded-lg 
+                    bg-white/10 border border-white/20 
+                    hover:bg-white/20 transition"
                             >
                                 Cancel
                             </button>
 
                             <button
                                 onClick={() => {
+                                    if (quantity > maxStocks) {
+                                        return
+                                    }
+
                                     if (userHoldings.includes(stockSymbol)) {
                                         handleBuySell(stockSymbol, quantity, 'sell');
                                         setSellOpen(false);
                                     } else {
-                                        console.log('You dont own this stock gng')
+                                        console.log('You dont own this stock gng');
                                     }
                                 }}
-                                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition"
+                                className="px-4 py-2 rounded-lg 
+                    bg-red-500/80 hover:bg-red-500 
+                    shadow-lg transition"
                                 disabled={quantity < 1}
                             >
                                 Sell

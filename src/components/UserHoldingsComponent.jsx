@@ -55,15 +55,35 @@ export default function UserHoldings() {
                                         })
                                     }}
                                 >
-                                    <td className="py-4 text-left">
+                                    <td className="py-4 text-left flex items-center gap-3">
                                         {holding.symbol.split('.')[0]}
+
+                                        {(() => {
+                                            const gainLoss =
+                                                (holding.current_price - holding.price_bought) * holding.shares
+                                            const isProfit = gainLoss >= 0
+
+                                            return (
+                                                <span
+                                                    className={`px-2 py-0.5 rounded-full text-xs font-medium backdrop-blur-md border${isProfit
+                                                            ? "bg-green-500/10 text-green-400 border-green-400/30"
+                                                            : "bg-red-500/10 text-red-400 border-red-400/30"
+                                                        }`}
+                                                >
+                                                    LKR {isProfit && "+"} {gainLoss.toFixed(2)}
+                                                </span>
+                                            )
+                                        })()}
                                     </td>
+
                                     <td className="py-4 text-right">
                                         {holding.shares}
                                     </td>
+
                                     <td className="py-4 text-right">
                                         LKR {holding.current_price}
                                     </td>
+
                                     <td className="py-4 text-right">
                                         LKR {holding.price_bought}
                                     </td>

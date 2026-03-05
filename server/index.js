@@ -22,12 +22,13 @@ app.use(cors({
   credentials: true   // allow cookies
 }));
 app.set('trust proxy', 1);
+// secure: false, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 ADD THIS WHEN DEPLOYING
 app.use(express.json())
 app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
-  cookie: { httpOnly: true, secure: true, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 },
+  cookie: { httpOnly: true, secure: false, sameSite: 'none', maxAge: 1000 * 60 * 60 * 24 },
   store: MongoStore.create({
     mongoUrl: process.env.DATABASE_URL
   }),
@@ -50,13 +51,13 @@ mongoose.connect(dbURI).catch((err) => console.log(err));
 
 if (process.env.NODE_ENV !== 'production') {
 
-  // Serve static files from the dist directory
-  app.use(express.static("dist"));
-  // Serve index.html for all other requests
-  app.get("/{*splat}", (req, res) => {
-    res.sendFile(__dirname + "/dist/index.html");
-  });
-  // Start the server
+  // // Serve static files from the dist directory
+  // app.use(express.static("dist"));
+  // // Serve index.html for all other requests
+  // app.get("/{*splat}", (req, res) => {
+  //   res.sendFile(__dirname + "/dist/index.html");
+  // });
+  // // Start the server
   const port = process.env.PORT || 4444;
   mongoose.connect(dbURI).then((result) => app.listen(3000)).catch((err) => { console.log(err) })
 }
