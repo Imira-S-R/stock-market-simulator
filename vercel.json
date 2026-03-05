@@ -4,6 +4,10 @@
       "maxDuration": 60
     }
   },
+  "crons": [{
+    "path": "/api/get_snapshot_values",
+    "schedule": "30 12 * * *"
+  }],
   "rewrites": [
     {
       "source": "/api/(.*)",
