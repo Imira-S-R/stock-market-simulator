@@ -3,6 +3,7 @@ import PortfolioSummary from "../components/PortfolioSummaryComponent"
 import TopGainers from "../components/TopGainersComponent"
 import UserHoldings from "../components/UserHoldingsComponent"
 import { useNavigate } from "react-router-dom";
+import UserWishlist from "../components/UserWishlistComponent";
 
 export default function Home() {
     let user_id;
@@ -65,6 +66,7 @@ export default function Home() {
 
                 <PortfolioSummary />
                 <UserHoldings />
+                <UserWishlist />
             </div>
         </div>
     );

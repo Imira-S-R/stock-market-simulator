@@ -112,7 +112,7 @@ module.exports.get_portfolio_value = async (req, res) => {
             const data = await response.json();
 
             portfolio_value +=
-                stock.shares * data.reqSymbolInfo.lastTradedPrice;
+                stock.shares * (data.reqSymbolInfo.lastTradedPrice ? data.reqSymbolInfo.lastTradedPrice : data.reqSymbolInfo.previousClose);
         }
 
         // user.portfolio.map((stock) => portfolio_value += (stock.shares * stock.price_bought))
@@ -184,7 +184,7 @@ module.exports.get_user_holdings = async (req, res) => {
                 symbol: stock.symbol,
                 shares: stock.shares,
                 price_bought: stock.price_bought,
-                current_price: data.reqSymbolInfo.lastTradedPrice,
+                current_price: data.reqSymbolInfo.lastTradedPrice ? data.reqSymbolInfo.lastTradedPrice : data.reqSymbolInfo.previousClose,
             });
         }
 
@@ -213,7 +213,7 @@ module.exports.search_for_company = async (req, res) => {
 
             return bStarts - aStarts;
         });
-    
+
     res.json(similarNames)
 
 }
@@ -272,5 +272,35 @@ module.exports.get_user_transactions = async (req, res) => {
         res.json(err)
     }
 
+
+}
+
+module.exports.get_user_wishlist = async (req, res) => {
+    const userId = req.user._id
+
+    const user = await User.findById(userId);
+
+    res.json(user.wishlist)
+
+}
+
+module.exports.add_to_wishlist = async (req, res) => {
+    const userId = req.user._id
+    const { symbol } = req.body
+
+    await User.updateOne(
+        { _id: userId },
+        { $push: { wishlist: symbol } }
+    )
+}
+
+module.exports.remove_from_wishlist = async (req, res) => {
+    const userId = req.user._id
+    const { symbol } = req.body
+
+    await User.updateOne(
+        { _id: userId },
+        { $pull: { wishlist: symbol } }
+    );
 
 }

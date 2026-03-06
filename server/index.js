@@ -21,7 +21,7 @@ app.use(cors({
   origin: true,       
   credentials: true   
 }));
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); 
 app.use(express.json())
 app.use(session({
   secret: process.env.SECRET_KEY,

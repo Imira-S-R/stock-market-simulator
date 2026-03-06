@@ -13,5 +13,9 @@ router.get('/api/user_transactions', stockController.get_user_transactions)
 router.get('/api/get_gainers', stockController.get_gainers)
 router.get('/api/get_user_info', stockController.get_user_info)
 router.post('/api/get_company_chart_info', stockController.get_company_chart_info)
+router.get('/api/get_wishlist', stockController.get_user_wishlist)
+router.post('/api/add_to_wishlist', stockController.add_to_wishlist)
+router.post('/api/remove_from_wishlist', stockController.remove_from_wishlist)
+
 
 module.exports = router

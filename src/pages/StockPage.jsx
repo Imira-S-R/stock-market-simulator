@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { get_company_info, get_company_chart_info } from "../../api";
+import { get_company_info, get_company_chart_info, get_user_wishlist, add_to_wishlist, remove_from_wishlist } from "../../api";
 import { ClipLoader } from 'react-spinners'
 import {
     Chart as ChartJS,
@@ -13,6 +13,9 @@ import {
     Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { CiStar } from "react-icons/ci";
+import { FaStar } from "react-icons/fa6";
+import { isWhitelisted } from "validator";
 
 ChartJS.register(
     CategoryScale,
@@ -37,6 +40,7 @@ export default function StockPage() {
     const [maxStocks, setMaxStocks] = useState(0)
     const [chartLabel, setChartLabel] = useState([])
     const [chartData, setChartData] = useState([])
+    const [isWishlisted, setIsWishlisted] = useState(false)
 
     const _data = {
         labels: chartLabel,
@@ -59,7 +63,7 @@ export default function StockPage() {
         plugins: {
             legend: { display: false },
             tooltip: {
-                enabled: true,                
+                enabled: true,
                 backgroundColor: "rgba(255,255,255,0.1)",
                 titleColor: "#fff",
                 bodyColor: "#fff",
@@ -75,8 +79,8 @@ export default function StockPage() {
             },
         },
         interaction: {
-            mode: "nearest",   
-            intersect: true,   
+            mode: "nearest",
+            intersect: true,
         },
         scales: {
             x: {
@@ -102,13 +106,13 @@ export default function StockPage() {
                     },
 
                     body: JSON.stringify({
-                        symbol: symbol,       
-                        price_bought: stockPrice,     
-                        shares: qty           
+                        symbol: symbol,
+                        price_bought: stockPrice,
+                        shares: qty
                     },)
                 });
 
-                const data = await res.json(); 
+                const data = await res.json();
                 console.log("Server response:", data);
 
                 if (res.ok) {
@@ -132,9 +136,9 @@ export default function StockPage() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        symbol: symbol,       
-                        price_sold: stockPrice,     
-                        shares: qty          
+                        symbol: symbol,
+                        price_sold: stockPrice,
+                        shares: qty
                     })
                 });
 
@@ -152,10 +156,22 @@ export default function StockPage() {
         }
     }
 
+    async function handleWishlisting(isWishlisted) {
+        if (isWishlisted) {
+            add_to_wishlist(state)
+        } else {
+            remove_from_wishlist(state)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await get_company_info(state);
             const chart_res = await get_company_chart_info(res.reqSymbolInfo.id)
+            const user_wishlist = await get_user_wishlist()
+            if (user_wishlist.includes(state)) {
+                setIsWishlisted(true)
+            }
             setChartLabel(chart_res[0])
             setChartData(chart_res[1])
             setStockSymbol(res.reqSymbolInfo.symbol)
@@ -214,9 +230,12 @@ export default function StockPage() {
                             </div>
 
                             <div>
-                                <h1 className="text-3xl font-bold tracking-wide">
-                                    {data.reqSymbolInfo.name}
-                                </h1>
+                                <div className="flex items-center gap-x-2 flex-col sm:flex-row">
+                                    <h1 className="text-3xl font-bold tracking-wide">
+                                        {data.reqSymbolInfo.name}
+                                    </h1>
+                                    <div className="text-3xl bg-white/5 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-lg my-2 sm:my-0" onClick={() => {setIsWishlisted(prev => !prev);  handleWishlisting(!isWishlisted)}}>{isWishlisted ? <FaStar /> : <CiStar />}</div>
+                                </div>
                                 <p className="text-lg text-gray-400 mt-1">
                                     SYMBOL: {data.reqSymbolInfo.symbol}
                                 </p>

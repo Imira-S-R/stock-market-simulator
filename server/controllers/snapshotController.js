@@ -35,7 +35,7 @@ module.exports.get_portfolio_chart_values = async (req, res) => {
         const dateKey = d.toISOString().split('T')[0];
 
         labels.push(d.getDate());
-        values.push(transactionMap[dateKey] || 0);
+        values.push(transactionMap[dateKey] || 1000000);
     }
 
     console.log(labels, values);

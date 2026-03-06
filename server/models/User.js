@@ -13,7 +13,10 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String
     },
-    
+    wishlist: {
+    type: [String],
+    default: []
+  } 
 })
 
 const User = mongoose.model('user', userSchema)
