@@ -15,7 +15,7 @@ function App() {
     <BrowserRouter>
       <NavbarComponent isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="/authentication" element={<AuthenticationScreen setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/market" element={<Market />} />
