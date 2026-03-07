@@ -18,10 +18,10 @@ const app = express()
 dbURI = process.env.DATABASE_URL
 
 app.use(cors({
-  origin: true,       
-  credentials: true   
+  origin: true,
+  credentials: true
 }));
-app.set('trust proxy', 1); 
+app.set('trust proxy', 1);
 app.use(express.json())
 app.use(session({
   secret: process.env.SECRET_KEY,

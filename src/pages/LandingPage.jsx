@@ -46,7 +46,7 @@ export default function LandingPage() {
                     skills before risking real money.
                 </p>
 
-                <button onClick={handleGoogleLogin} className="mt-10 px-8 py-4 bg-green-500 hover:bg-green-400 text-black font-semibold rounded-lg transition duration-200 shadow-lg hover:shadow-green-500/30">
+                <button onClick={() => {navigate('/authentication')}} className="mt-10 px-8 py-4 bg-green-500 hover:bg-green-400 text-black font-semibold rounded-lg transition duration-200 shadow-lg hover:shadow-green-500/30">
                     Get Started
                 </button>
 

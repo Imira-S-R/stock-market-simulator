@@ -234,7 +234,7 @@ export default function StockPage() {
                                     <h1 className="text-3xl font-bold tracking-wide">
                                         {data.reqSymbolInfo.name}
                                     </h1>
-                                    <div className="text-3xl bg-white/5 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-lg my-2 sm:my-0" onClick={() => {setIsWishlisted(prev => !prev);  handleWishlisting(!isWishlisted)}}>{isWishlisted ? <FaStar /> : <CiStar />}</div>
+                                    <div className="text-3xl bg-white/5 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-lg my-2 sm:my-0" onClick={() => { setIsWishlisted(prev => !prev); handleWishlisting(!isWishlisted) }}>{isWishlisted ? <FaStar /> : <CiStar />}</div>
                                 </div>
                                 <p className="text-lg text-gray-400 mt-1">
                                     SYMBOL: {data.reqSymbolInfo.symbol}
@@ -343,13 +343,13 @@ export default function StockPage() {
                             min={1}
                             value={quantity}
                             onChange={(e) => setQuantity(Number(e.target.value))}
-                            className="w-full mb-4 px-3 py-2 rounded-lg
+                            className="w-full mb-1 px-3 py-2 rounded-lg
                 bg-white/10 border border-white/20
                 text-white placeholder-white/60
                 focus:outline-none focus:ring-2 focus:ring-green-400"
                         />
 
-                        <p className="mb-3 text-red-300 font-medium">
+                        {/* <p className="mb-3 text-red-300 font-medium">
                             Price: -{quantity * stockPrice} LKR
                         </p>
 
@@ -357,7 +357,24 @@ export default function StockPage() {
                             <p className="mb-4 text-red-300 font-medium">
                                 You do not have enough cash
                             </p>
-                        )}
+                        )} */}
+
+
+                        <div className="mt-4 p-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md">
+                            <div className="flex justify-between text-base font-semibold">
+                                <span>Total Cost</span>
+                                <span className="text-red-300">
+                                    {quantity * stockPrice} LKR
+                                </span>
+                            </div>
+
+                            <div className="flex justify-between text-sm mt-2">
+                                <span className="text-white/70">Remaining Balance</span>
+                                <span className={(user.cashBalance - quantity * stockPrice) < 0 ? "text-red-300" : "text-green-300"}>
+                                    {user.cashBalance - quantity * stockPrice} LKR
+                                </span>
+                            </div>
+                        </div>
 
                         <div className="flex justify-end gap-3 mt-4">
                             <button
@@ -378,8 +395,8 @@ export default function StockPage() {
                                 }}
                                 className="px-4 py-2 rounded-lg 
                     bg-green-500/80 hover:bg-green-500 
-                    shadow-lg transition"
-                                disabled={quantity < 1}
+                    shadow-lg transition disabled:cursor-not-allowed"
+                                disabled={quantity < 1 || (quantity * stockPrice > user.cashBalance)}
                             >
                                 Buy
                             </button>
@@ -442,21 +459,39 @@ export default function StockPage() {
                 focus:outline-none focus:ring-2 focus:ring-red-400"
                         />
 
-                        {userHoldings.includes(stockSymbol) ? (
-                            <p className="mb-3 text-green-300 font-medium">
-                                Price: +{quantity * stockPrice} LKR
-                            </p>
-                        ) : (
+                        <p className="text-xs text-white/70 mb-2">
+                            Available: {maxStocks} shares
+                        </p>
+
+                        {/* {!userHoldings.includes(stockSymbol) && (
                             <p className="mb-3 text-red-300 font-medium">
                                 You don't own this stock
                             </p>
-                        )}
+                        )} */}
 
                         {(quantity > maxStocks) && (
                             <p className="mb-3 text-red-300 font-medium">
                                 Not enough stocks
                             </p>
                         )}
+
+
+                        <div className="mt-4 p-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md">
+
+                            <div className="flex justify-between text-base font-semibold">
+                                <span>Total Value</span>
+                                <span className="text-green-300">
+                                    +{quantity * stockPrice} LKR
+                                </span>
+                            </div>
+
+                            <div className="flex justify-between text-sm mt-2">
+                                <span className="text-white/70">Balance After Sell</span>
+                                <span className="text-green-300">
+                                    {user.cashBalance + quantity * stockPrice} LKR
+                                </span>
+                            </div>
+                        </div>
 
 
 
@@ -485,8 +520,8 @@ export default function StockPage() {
                                 }}
                                 className="px-4 py-2 rounded-lg 
                     bg-red-500/80 hover:bg-red-500 
-                    shadow-lg transition"
-                                disabled={quantity < 1}
+                    shadow-lg transition disabled:cursor-not-allowed"
+                                disabled={quantity < 1 || quantity > maxStocks}
                             >
                                 Sell
                             </button>
