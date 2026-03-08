@@ -29,7 +29,11 @@ export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
 
         if (res.ok) {
             setIsLoggedIn(true)
-            navigate('/dashboard')
+            if (location.pathname === '/') {
+                navigate('/dashboard')
+            } else {
+                navigate(location.pathname)
+            }
         } else {
             navigate('/authentication')
         }
@@ -38,7 +42,7 @@ export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
     }
 
     useEffect(() => {
-        if (location.pathname === '/dashboard') {
+        if (location.pathname === '/dashboard' || location.pathname === '/company-profile' || location.pathname === '/transactions' || location.pathname === '/market') {
             checkAuth()
         }
     }, [])
