@@ -15,7 +15,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa6";
-import { isWhitelisted } from "validator";
+import { toast } from "react-toastify";
 
 ChartJS.register(
     CategoryScale,
@@ -41,6 +41,8 @@ export default function StockPage() {
     const [chartLabel, setChartLabel] = useState([])
     const [chartData, setChartData] = useState([])
     const [isWishlisted, setIsWishlisted] = useState(false)
+
+    const notify = () => toast("Wow so easy!");
 
     const _data = {
         labels: chartLabel,
@@ -117,6 +119,7 @@ export default function StockPage() {
 
                 if (res.ok) {
                     console.log('HOORAY')
+                    toast.success("Transaction Successfull!", {theme: 'dark'})
                 }
 
             } catch (err) {
@@ -147,6 +150,7 @@ export default function StockPage() {
 
                 if (res.ok) {
                     console.log('HOORAY')
+                    toast.success("Transaction Successfull!", {theme: 'dark'})
                 }
 
             } catch (err) {
@@ -176,7 +180,7 @@ export default function StockPage() {
             setChartData(chart_res[1])
             setStockSymbol(res.reqSymbolInfo.symbol)
             setStockPrice(res.reqSymbolInfo.lastTradedPrice)
-            setData(res);
+            setData(res)
         };
 
         const fetchUserHoldings = async () => {
