@@ -41,8 +41,7 @@ export default function StockPage() {
     const [chartLabel, setChartLabel] = useState([])
     const [chartData, setChartData] = useState([])
     const [isWishlisted, setIsWishlisted] = useState(false)
-
-    const notify = () => toast("Wow so easy!");
+    const [disableBuySell, setDisableBuySell] = useState(false)
 
     const _data = {
         labels: chartLabel,
@@ -179,7 +178,12 @@ export default function StockPage() {
             setChartLabel(chart_res[0])
             setChartData(chart_res[1])
             setStockSymbol(res.reqSymbolInfo.symbol)
-            setStockPrice(res.reqSymbolInfo.lastTradedPrice)
+            setStockPrice(res.reqSymbolInfo.lastTradedPrice ? res.reqSymbolInfo.lastTradedPrice : res.reqSymbolInfo.previousClose)
+
+            if (!res.reqSymbolInfo.lastTradedPrice) {
+                setDisableBuySell(true)
+                toast.error('Price Unavailable Cannot Buy/Sell')
+            }
             setData(res)
         };
 
@@ -258,10 +262,10 @@ export default function StockPage() {
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            <button onClick={() => { setBuyOpen(true) }} className="px-8 py-3 rounded-xl bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:scale-105 font-semibold">
+                            <button disabled={disableBuySell} onClick={() => { setBuyOpen(true) }} className="px-8 py-3 rounded-xl bg-green-600 hover:bg-green-700 transition-all duration-300 shadow-lg hover:scale-105 font-semibold disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-green-600 disabled:hover:scale-100">
                                 BUY
                             </button>
-                            <button onClick={() => { setSellOpen(true) }} className="px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 transition-all duration-300 shadow-lg hover:scale-105 font-semibold">
+                            <button disabled={disableBuySell} onClick={() => { setSellOpen(true) }} className="px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 transition-all duration-300 shadow-lg hover:scale-105 font-semibold disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-red-600 disabled:hover:scale-100">
                                 SELL
                             </button>
                         </div>
