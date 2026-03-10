@@ -7,13 +7,25 @@ const snapshotRoutes = require('./routes/snapshotRoutes')
 const passport = require('passport')
 const session = require('express-session')
 const MongoStore = require('connect-mongo').default
+const redisClient = require('./config/redis')
 require('dotenv').config()
-
-
-
 require('./config/passport')(passport)
 
 const app = express()
+
+redisClient.on('error', (err) => console.error('Redis Error:', err))
+redisClient.on('ready', () => console.log('Redis client ready UwU'))
+
+;(async () => {
+  try {
+    await redisClient.connect()
+    const pong = await redisClient.ping()
+    console.log('Ping response:', pong)
+  } catch (err) {
+    console.error('Failed to connect to Redis:', err)
+  }
+})()
+
 
 dbURI = process.env.DATABASE_URL
 

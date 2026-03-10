@@ -2,6 +2,7 @@ const User = require("../models/User")
 const Transaction = require('../models/Transaction')
 const companyData = require('../data')
 const all_company_data = require("../data")
+const redisClient = require('../config/redis')
 
 module.exports.buy_stock = async (req, res) => {
     try {
@@ -94,6 +95,18 @@ module.exports.get_portfolio_value = async (req, res) => {
     let portfolio_value = 0
     let cash_balance = 0
 
+    const key = "portfolio_value:" + req.user._id
+    const value = await redisClient.get(key)
+
+    if (value) {
+        console.log('key', key)
+        console.log('value', value)
+        res.status(200).json(JSON.parse(value))
+        console.log('CACHE HIT')
+        return
+    }
+
+
     try {
         const user = await User.findById(userId)
 
@@ -118,7 +131,11 @@ module.exports.get_portfolio_value = async (req, res) => {
         // user.portfolio.map((stock) => portfolio_value += (stock.shares * stock.price_bought))
         cash_balance = user.cashBalance
 
+        await redisClient.set(key, JSON.stringify({ portfolio_value, cash_balance }), {
+            EX: 200
+        })
         res.status(200).json({ portfolio_value, cash_balance })
+        console.log('CACHE MISS')
 
     } catch (err) {
         res.status(500).json({ error: err.message })
@@ -161,6 +178,17 @@ module.exports.get_user_holdings = async (req, res) => {
     const userId = req.user._id
     let user_holdings = []
 
+    const key = "user_holdings:" + userId
+    const value = await redisClient.get(key)
+
+    if (value) {
+        console.log('key', key)
+        console.log('value', value)
+        res.status(200).json(JSON.parse(value))
+        console.log('CACHE HIT')
+        return
+    }
+
     try {
         const user = await User.findById(userId)
 
@@ -188,7 +216,9 @@ module.exports.get_user_holdings = async (req, res) => {
             });
         }
 
-
+        await redisClient.set(key, JSON.stringify(user_holdings), {
+            EX: 200
+        })
         return res.json(user_holdings)
 
     } catch (err) {
