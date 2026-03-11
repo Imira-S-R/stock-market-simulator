@@ -50,6 +50,8 @@ module.exports.buy_stock = async (req, res) => {
         }
 
         const updatedUser = await User.findById(userId)
+        await redisClient.del(`portfolio_value:${userId}`)
+        await redisClient.del(`user_holdings:${userId}`)
         res.status(200).json(updatedUser)
 
     } catch (err) {
@@ -81,9 +83,10 @@ module.exports.sell_stock = async (req, res) => {
         )
 
         const updatedUser = await User.findById(userId)
-
+        await redisClient.del(`portfolio_value:${userId}`)
+        await redisClient.del(`user_holdings:${userId}`)
         res.status(200).json(updatedUser)
-
+        
 
     } catch (err) {
         res.status(500).json({ error: err.message })

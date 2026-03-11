@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo_img.png";
 import { useLocation } from "react-router-dom";
+import { ClipLoader } from 'react-spinners'
 
 export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
     const navigate = useNavigate()
     const location = useLocation();
+    const [loading, setLoading] = useState(false)
 
     const handleGoogleLogin = () => {
         window.location.href = `${import.meta.env.VITE_API_URL}/google`
@@ -25,6 +27,7 @@ export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
     }
 
     const checkAuth = async () => {
+        setLoading(true)
         const res = await fetch(`${import.meta.env.VITE_API_URL}/check_user`, { credentials: 'include' })
 
         if (res.ok) {
@@ -37,7 +40,7 @@ export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
         } else {
             navigate('/authentication')
         }
-        
+        setLoading(false)
         return res.ok
     }
 
@@ -57,7 +60,7 @@ export default function NavbarComponent({ isLoggedIn, setIsLoggedIn }) {
                 <Link to='/transactions'>Transactions</Link>
                 <Link to='/logout' onClick={handleGoogleLogout}>LogOut</Link>
             </div> : <div className="flex gap-x-5">
-                <h1 onClick={() => { checkAuth() }} className="cursor-pointer">Dashboard</h1>
+                <h1 onClick={() => { checkAuth() }} className="cursor-pointer">{loading ? <ClipLoader color="#ffff"/> : 'Dashboard'}</h1>
             </div>}
         </div>
     )
