@@ -48,7 +48,7 @@ export default function LandingPage({ setIsLoggedIn }) {
     // }, [])
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center px-4 sm:px-6 pt-20">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center px-4 sm:px-6 pt-10 sm:pt-20">
 
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] rounded-full bg-green-500/[0.08] blur-3xl pointer-events-none" />
 
