@@ -16,15 +16,19 @@ export default function Home() {
         const istTime = new Date(
             now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
         );
-        console.log(istTime)
+
+        const day = istTime.getDay(); 
+        const isWeekday = day >= 1 && day <= 5;
+
+        if (!isWeekday) return false;
 
         const hours = istTime.getHours();
         const minutes = istTime.getMinutes();
 
         const totalMinutes = hours * 60 + minutes;
 
-        const start = 7 * 60 + 30;  // 7:30 AM
-        const end = 9 * 60 + 30;    // 9:30 AM
+        const start = 7 * 60 + 30; 
+        const end = 9 * 60 + 30; 
 
         return totalMinutes >= start && totalMinutes < end;
     }
